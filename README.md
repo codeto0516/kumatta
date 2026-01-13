@@ -1,36 +1,93 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Solo Camp Bear Risk Map
 
-## Getting Started
+ソロキャンプ向けに、**クマ出没リスクを直感的に判断できる地図 UI**の検証として作成したミニアプリです。
 
-First, run the development server:
+数値や一覧ではなく、  
+**「地図の色が変わることで危険度を感覚的に把握できる」**  
+ことを目的にしています。
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 背景・動機
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+ソロキャンプが趣味で、近年クマ出没のニュースが増えていることから、
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+-   出没情報は自治体ごとに点在している
+-   数値やテキスト情報だけでは、現地感覚がつかみにくい
 
-## Learn More
+と感じていました。
 
-To learn more about Next.js, take a look at the following resources:
+そこで、国や自治体が公開している水没・ハザードマップと同じ考え方で、  
+**「距離に応じてリスクが色で変わる地図 UI」** を作ってみようと考えました。
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## アプリの概要
 
-## Deploy on Vercel
+-   キャンプ場を選択すると地図が移動
+-   周辺のクマ出没データをもとに、危険度レイヤーを表示
+-   クマ出没地点に近づくほど、マップの色が変化します
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+危険度は以下のようにシンプルに定義しています。
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+-   🔴 高リスク（出没地点から近い）
+-   🟡 注意
+-   🟢 低リスク
+
+※ 正確な予測や警告を目的としたものではなく、  
+　**行動判断を早くするための可視化**に割り切っています。
+
+---
+
+## 使用技術
+
+-   Leaflet
+-   JavaScript / TypeScript
+-   GeoJSON（クマ出没データ・キャンプ場データ）
+-   OpenStreetMap
+
+---
+
+## 技術的なポイント
+
+-   Leaflet を用いた軽量な 2D 地図 UI の実装
+-   レイヤー構成を意識し、以下を分離
+    -   ベースマップ
+    -   キャンプ場マーカー
+    -   クマ出没リスクレイヤー
+-   クマ出没地点からの距離に応じて、色・透明度を変化させる表現
+
+「解析」や「精度」ではなく、  
+**観測・取得されたデータを“どう見せるか”** にフォーカスしています。
+
+---
+
+## あえてやっていないこと
+
+-   出没データのリアルタイム取得
+-   高精度な予測ロジック
+-   ログイン・CRUD・管理機能
+-   3D 表示や重い描画処理
+
+UI 検証と設計思考を重視し、  
+実務での拡張を前提に最小構成に留めています。
+
+---
+
+## 今後やるとしたら
+
+-   自治体オープンデータ API との連携
+-   時系列による出没傾向の可視化
+-   天候・季節データとのレイヤー統合
+-   リモートセンシングデータ（環境・地形）との組み合わせ
+
+---
+
+## このプロジェクトで意識したこと
+
+-   正確さよりも「判断しやすさ」
+-   情報量よりも「直感性」
+-   技術デモではなく「使う人の視点」
+
+地図 UI は、  
+**データそのものよりも“伝え方”が価値になる領域**だと考えています。
